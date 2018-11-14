@@ -48,7 +48,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
     private static final int REQUEST_CHECK_SETTINGS = 2;
     private Wifi wifi;
-    private SendMessage sendMessage;
 
 
     @Override
@@ -75,7 +74,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         createLocationRequest();
 
         jsonArray = new JSONArray();
-        sendMessage = new SendMessage(this);
+        SendMessage sendMessage = new SendMessage(this);
         new Thread(sendMessage).start();
     }
 
@@ -189,7 +188,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             double longitude = location.getLongitude();
             double latitude = location.getLatitude();
             int level = wifi.getLevel();
-            Log.i("wifi","level:" + level + " Longitude: " + longitude + " Latitude: " + latitude);
             JSONObject data = new JSONObject();
             try {
                 data.put("wifi", level+"");
@@ -271,7 +269,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         return jsonArray;
     }
     public void clearJson() {
-        for (int i = 1; i <= jsonArray.length(); i++){
+        for (int i = jsonArray.length(); i >= 0; i--){
             jsonArray.remove(i);
         }
     }

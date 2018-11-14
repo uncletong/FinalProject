@@ -12,13 +12,13 @@ import java.util.TimerTask;
 
 public class SendMessage implements Runnable{
     final private String IP = "159.65.148.98";
-    final int PORT = 9999;
+    final private int PORT = 9999;
     private Socket socket;
     private JSONArray jsonArray;
     private DataOutputStream outputStream;
     private MapsActivity mapsActivity;
 
-    public SendMessage(MapsActivity mapsActivity) {
+    SendMessage(MapsActivity mapsActivity) {
         this.mapsActivity = mapsActivity;
     }
 
