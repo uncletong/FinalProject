@@ -6,7 +6,6 @@ import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -33,6 +32,8 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, GoogleMap.OnMarkerClickListener, LocationSource, LocationListener {
@@ -41,12 +42,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleApiClient googleApiClient;
 
     private Location last_location;
-    private JSONObject jsonObject;
+    private JSONArray jsonArray;
     private LocationRequest locationRequest;
     private boolean locationUpdate;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
     private static final int REQUEST_CHECK_SETTINGS = 2;
     private Wifi wifi;
+    private SendMessage sendMessage;
 
 
     @Override
@@ -72,9 +74,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         //request location, if allowed, start update location
         createLocationRequest();
 
-        Handler handler = new Handler();
-
-
+        jsonArray = new JSONArray();
+        sendMessage = new SendMessage(this);
+        new Thread(sendMessage).start();
     }
 
     @Override
@@ -188,6 +190,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             double latitude = location.getLatitude();
             int level = wifi.getLevel();
             Log.i("wifi","level:" + level + " Longitude: " + longitude + " Latitude: " + latitude);
+            JSONObject data = new JSONObject();
+            try {
+                data.put("wifi", level+"");
+                data.put("longitude", longitude + "");
+                data.put("latitude", latitude + "");
+                jsonArray.put(data);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            Log.i("json",jsonArray.toString());
 
         }
 
@@ -254,6 +266,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 //        });
 //
 //    }
+
+    public JSONArray getJsonArray() {
+        return jsonArray;
+    }
+    public void clearJson() {
+        for (int i = 1; i <= jsonArray.length(); i++){
+            jsonArray.remove(i);
+        }
+    }
 
     protected void createLocationRequest() {
         locationRequest = new LocationRequest();
