@@ -12,6 +12,11 @@ public class Wifi {
         wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
     }
 
+    public String getSSID() {
+        wifiInfo = wifiManager.getConnectionInfo();
+        return wifiInfo.getSSID();
+    }
+
     public int getLevel(){
         wifiInfo = wifiManager.getConnectionInfo();
         return wifiInfo.getRssi();

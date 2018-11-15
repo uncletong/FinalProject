@@ -173,20 +173,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onLocationChanged(Location location) {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
         last_location = location;
         if (location != null){
             double longitude = location.getLongitude();
             double latitude = location.getLatitude();
+            if (!wifi.getSSID().equals("PolyUWLAN")){
+                return;
+            }
             int level = wifi.getLevel();
             JSONObject data = new JSONObject();
             try {
