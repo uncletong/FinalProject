@@ -177,7 +177,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if (location != null){
             double longitude = location.getLongitude();
             double latitude = location.getLatitude();
-            if (!wifi.getSSID().equals("PolyUWLAN") && location.getAccuracy() > 10){
+            if (!wifi.getSSID().equals("PolyUWLAN") && location.getAccuracy() < 10){
                 return;
             }
             int level = wifi.getLevel();
